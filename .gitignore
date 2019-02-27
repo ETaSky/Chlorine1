@@ -1,0 +1,6 @@
+.DS_Store
+tmp/
+Tmp/
+tmp*
+1-imported_seqs/imported_pe_seqs.qza
+2-demux/demux.qza
