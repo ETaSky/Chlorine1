@@ -1,5 +1,5 @@
-# QIIME2 processing on Biomodel samples
-**Initiation Date:** 2019-02-11
+# QIIME2 processing on Chlorine Water Mice experiment samples
+**Initiation Date:** 2019-02-27
 
 ## Creating folders
 ```
@@ -10,15 +10,21 @@ mkdir -p 3-dada
 
 ```
 
+## Download the raw data from NYU server
+```
+cd 0-fastq
+wget -r -np -nH --cut-dirs 5 https://genome.med.nyu.edu/results/external/rutgers/2019-02-19/fastq/
+```
+
 ## Renaming the raw data
 To meet qiime2 requirement
 ```
-mv 0-fastq/lane1_NoIndex_L001_R1_001-2.fastq.gz 0-fastq/forward.fastq.gz
-mv 0-fastq/lane1_NoIndex_L001_R2_001-2.fastq.gz 0-fastq/barcodes.fastq.gz
-mv 0-fastq/lane1_NoIndex_L001_R3_001-2.fastq.gz 0-fastq/reverse.fastq.gz
+mv 0-fastq/lane1_S1_L001_R1_001.fastq.gz 0-fastq/forward.fastq.gz
+mv 0-fastq/lane1_S1_L001_I1_001.fastq.gz 0-fastq/barcodes.fastq.gz
+mv 0-fastq/lane1_S1_L001_R2_001.fastq.gz 0-fastq/reverse.fastq.gz
 ```
 
-## Import into QIIME2
+## Import into QIIME2 (QIIME2-2018.8)
 ```
 qiime tools import \
     --type EMPPairedEndSequences \
@@ -29,7 +35,7 @@ qiime tools import \
 ## Demultiplexing
 ```
 qiime demux emp-paired --i-seqs 1-imported_seqs/imported_pe_seqs.qza \
-    --m-barcodes-file Mapping-Humanization-Biomodels-Correct.txt \
+    --m-barcodes-file Mapping_chlorination_022719.txt \
     --m-barcodes-column BarcodeSequence \
     --o-per-sample-sequences 2-demux/demux.qza
 
@@ -55,7 +61,7 @@ qiime dada2 denoise-paired \
 qiime feature-table summarize \
     --i-table 3-dada/table.qza \
     --o-visualization 3-dada/table.qzv \
-    --m-sample-metadata-file Mapping-Humanization-Biomodels-Correct.txt
+    --m-sample-metadata-file Mapping_chlorination_022719.txt
 
 ## Sumarizing representative sequences
 qiime feature-table tabulate-seqs \
